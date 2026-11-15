@@ -6,7 +6,18 @@ from google import genai
 
 # Load Gemini API key
 load_dotenv()
+
 api_key = os.getenv("GEMINI_API_KEY")
+
+if not api_key:
+    try:
+        api_key = st.secrets["GEMINI_API_KEY"]
+    except Exception:
+        api_key = None
+
+if not api_key:
+    st.error("Gemini API key not found. Please check your settings.")
+    st.stop()
 
 # Connect to Gemini
 client = genai.Client(api_key=api_key)
